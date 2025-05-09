@@ -9,16 +9,12 @@ namespace LegacyWebForms
         {
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                // Define your routes here
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            // Move route registrations to top-level
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                // Example: Map static files or other custom routes if needed
-                endpoints.MapFallbackToFile("index.html");
-            });
+            app.MapFallbackToFile("index.html");
         }
     }
 }
