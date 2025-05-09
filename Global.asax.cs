@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LegacyWebForms
 {
-    public class Global : HttpApplication
+    public class Global
     {
-        void Application_Start(object sender, EventArgs e)
+        public static void ConfigureApplication(WebApplication app)
         {
-            // Code that runs on application startup
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            // Register routes
+            RouteConfig.RegisterRoutes(app);
+
+            // Register bundles (static files)
+            BundleConfig.RegisterBundles(app);
         }
     }
 }
