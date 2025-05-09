@@ -1,52 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LegacyWebForms
 {
     public class BundleConfig
     {
-        // For more information on Bundling, visit https://go.microsoft.com/fwlink/?LinkID=303951
-        public static void RegisterBundles(// TODO Script and style bundling works differently in ASP.NET Core. BundleCollection should be replaced by alternative bundling technologies. For more details see https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification.
-BundleCollection bundles)
+        public static void RegisterBundles(WebApplication app)
         {
-            RegisterJQueryScriptManager();
+            var env = app.Environment;
 
-            bundles.Add(new ScriptBundle("~/bundles/WebFormsJs").Include(
-                            "~/Scripts/WebForms/WebForms.js",
-                            "~/Scripts/WebForms/WebUIValidation.js",
-                            "~/Scripts/WebForms/MenuStandards.js",
-                            "~/Scripts/WebForms/Focus.js",
-                            "~/Scripts/WebForms/GridView.js",
-                            "~/Scripts/WebForms/DetailsView.js",
-                            "~/Scripts/WebForms/TreeView.js",
-                            "~/Scripts/WebForms/WebParts.js"));
+            // Use Webpack or other bundling tools to bundle and minify scripts.
+            // Serve static files from wwwroot folder.
+            app.UseStaticFiles();
 
-            // Order is very important for these files to work, they have explicit dependencies
-            bundles.Add(new ScriptBundle("~/bundles/MsAjaxJs").Include(
-                    "~/Scripts/WebForms/MsAjax/MicrosoftAjax.js",
-                    "~/Scripts/WebForms/MsAjax/MicrosoftAjaxApplicationServices.js",
-                    "~/Scripts/WebForms/MsAjax/MicrosoftAjaxTimer.js",
-                    "~/Scripts/WebForms/MsAjax/MicrosoftAjaxWebForms.js"));
+            // Example: Add custom middleware for serving bundled files if needed.
+            // This assumes you have pre-bundled files using a tool like Webpack.
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("/bundles/WebFormsJs"),
+                builder => builder.UseStaticFiles());
 
-            // Use the Development version of Modernizr to develop with and learn from. Then, when you’re
-            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                            "~/Scripts/modernizr-*"));
-        }
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("/bundles/MsAjaxJs"),
+                builder => builder.UseStaticFiles());
 
-        public static void RegisterJQueryScriptManager()
-        {
-            ScriptManager.ScriptResourceMapping.AddDefinition("jquery",
-                new ScriptResourceDefinition
-                {
-                    Path = "~/scripts/jquery-3.7.0.min.js",
-                    DebugPath = "~/scripts/jquery-3.7.0.js",
-                    CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.0.min.js",
-                    CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.0.js"
-                });
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("/bundles/modernizr"),
+                builder => builder.UseStaticFiles());
         }
     }
 }
