@@ -1,16 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Web;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LegacyWebForms
 {
-    public static class RouteConfig
+    public class RouteConfig
     {
-        public static void RegisterRoutes(RouteCollection routes)
+        public static void RegisterRoutes(WebApplication app)
         {
-            var settings = new FriendlyUrlSettings();
-            settings.AutoRedirectMode = RedirectMode.Permanent;
-            routes.EnableFriendlyUrls(settings);
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // Define your routes here
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // Example: Map static files or other custom routes if needed
+                endpoints.MapFallbackToFile("index.html");
+            });
         }
     }
 }

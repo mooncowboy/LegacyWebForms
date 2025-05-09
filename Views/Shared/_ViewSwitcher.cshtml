@@ -1,0 +1,5 @@
+@model LegacyWebForms.Models.ViewSwitcherModel
+
+<div id="viewSwitcher">
+    @Model.CurrentView view | <a href="@Model.SwitchUrl" data-ajax="false">Switch to @Model.AlternateView</a>
+</div>
